@@ -1,0 +1,20 @@
+{
+  "name": "avi-discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Avighna",
+  "license": "ISC",
+  "dependencies": {
+    "discord-slash-commands-client": "^1.2.2",
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.12"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
