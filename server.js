@@ -112,7 +112,7 @@ client.once('ready', async () => {
 
             exec('commands/scripts/math++.out ' + command_arguments, function (err, stdout, stderr) {
                 if (err) console.error(stderr);
-                reply(interaction, '```\n' + stdout + '\n```');
+                reply(interaction, '>\n' + stdout);
             });
         }
     })
