@@ -25,6 +25,7 @@ client.once('ready', async () => {
     .commands.get()
     // console.log(commands);
 
+    /*
     await getApp(guildId).commands.post({
         data: {
             name: 'ping',
@@ -51,6 +52,32 @@ client.once('ready', async () => {
             ],
         }
     })
+    */
+
+    /*
+    client.api.applications(client.user.id).commands.post({data: {
+        name: 'ping',
+        description: 'ping pong!'
+    }}) */
+
+    /*
+    client.api.applications(client.user.id).commands.post({
+        data: {
+                name: 'math',
+                description: "Use math++ in discord.",
+                options: [
+                    {
+                        name: 'command-arguments',
+                        description: 'Type in your command, like you would on a normal command line.',
+                        required: true,
+                        type: 3,
+                    }
+                ],
+        }
+    })
+    */
+    
+    
 
     client.ws.on('INTERACTION_CREATE', async (interaction) => {
         
@@ -76,6 +103,18 @@ client.once('ready', async () => {
                 reply(interaction, stdout);
             });
         }
+        if (command === 'math') {
+            exec('chmod +x commands/scripts/math++.out');
+
+            let command_arguments = interaction.data.options[0].value;
+
+            console.log('[EXECUTE] commands/scripts/math++.out ' + command_arguments);
+
+            exec('commands/scripts/math++.out ' + command_arguments, function (err, stdout, stderr) {
+                if (err) console.error(stderr);
+                reply(interaction, '```\n' + stdout + '\n```');
+            });
+        }
     })
 });
 
@@ -96,6 +135,7 @@ const reply = async (interaction, response) => {
 const fs = require('fs');
 const { description } = require('./commands/rot13');
 const rot13 = require('./commands/rot13');
+const { restart } = require('nodemon');
 client.commands = new Discord.Collection();
 const allCommands = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 
