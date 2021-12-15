@@ -73,8 +73,7 @@ client.once('ready', async () => {
 
             exec('commands/scripts/rot13.out \"' + text + "\"", function (err, stdout, stderr) {
                 if (err) console.error(stderr);
-                const embed = new Discord.MessageEmbed().setTitle('Rot13').setFooter("\"" + text + "\" in ROT13 is \n\n\"" + stdout + "\"");
-                reply(interaction, embed);
+                reply(interaction, stdout);
             });
         }
     })
@@ -86,11 +85,6 @@ const reply = async (interaction, response) => {
         content: response
     }
 
-    //Message is embed
-    if (typeof(response) === 'object') {
-        data = await createAPIMessage(interaction, response);
-    }
-
     client.api.interactions(interaction.id, interaction.token).callback.post({
         data: {
             type: 4,
@@ -99,19 +93,9 @@ const reply = async (interaction, response) => {
     })
 }
 
-const createAPIMessage = async (interaction, content) => {
-    const { data, files } = await Discord.APIMessage.create(
-        client.channels.resolve(interaction.channel_id),
-        content
-    )
-      .resolveData()
-      .resolveFiles()
-
-    return { ... data, files }
-}
-
 const fs = require('fs');
 const { description } = require('./commands/rot13');
+const rot13 = require('./commands/rot13');
 client.commands = new Discord.Collection();
 const allCommands = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 
