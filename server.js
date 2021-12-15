@@ -75,9 +75,30 @@ client.once('ready', async () => {
                 ],
         }
     })
+
+    client.api.applications(client.user.id).commands.post({
+        data: {
+                name: 'draw',
+                description: "Draw geometrical figures!",
+                options: [
+                    {
+                        name: 'polygon-name',
+                        description: 'Eg: right_angle_triangle',
+                        required: true,
+                        type: 3,
+                    },
+                    {
+                        name: 'sides',
+                        description: 'Syntax: [side1] [side2] ... [sideN]',
+                        required: true,
+                        type: 3,
+                    }
+                ],
+        }
+    })
     */
     
-    
+
 
     client.ws.on('INTERACTION_CREATE', async (interaction) => {
         
@@ -114,6 +135,9 @@ client.once('ready', async () => {
                 if (err) console.error(stderr);
                 reply(interaction, '>>> ' + stdout);
             });
+        }
+        if (command === 'draw') {
+            
         }
     })
 });
