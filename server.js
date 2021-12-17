@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { MessageAttachment } = require("discord.js")
 const { info } = require('console');
 var { exec, spawn } = require('child_process');
 const Discord = require('discord.js');
@@ -137,7 +138,40 @@ client.once('ready', async () => {
             });
         }
         if (command === 'draw') {
-            
+            exec('chmod +x commands/scripts/math++.out');
+
+            let shape = interaction.data.options[0].value;
+            let sides = interaction.data.options[1].value;
+
+            console.log('[EXECUTE] commands/scripts/math++.out draw ' + shape + ' ' + sides);
+
+            exec('commands/scripts/math++.out draw ' + shape + ' ' + sides, function (err, stdout, stderr) {
+                if (err) console.error(stderr);
+            });
+
+            const file = new MessageAttachment (
+                "image.bmp"
+            );
+
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 4,
+                    data: {
+                        content: "hello",
+                        "embeds": [
+                            {
+                            "title": `This is a cool embed`,
+                            image: {
+                                url: 'attachment://image.bmp',
+                            },
+                            "type": "rich",
+                            "description": "",
+                            "color": 0x00FFFF
+                            }
+                        ]
+                    },
+                }
+            })
         }
     })
 });
@@ -184,6 +218,20 @@ client.on('message', message => {
     else if (command == 'rot13') client.commands.get('Rot13').execute(message, args);
     else if (command == 'ebg13') message.channel.send('Did you mean .rot13, but in ROT13? :wink:');
     else if (command == 'sqrt') client.commands.get('Sqrt').execute(message, args);
+    else if (command === 'draw') {
+        exec('chmod +x commands/scripts/math++.out');
+
+        console.log('[EXECUTE] commands/scripts/math++.out draw ' + args[0] + ' ' + args[1] + ' ' + args[2] + ' ' + args[3]);
+
+        exec('commands/scripts/math++.out draw ' + args[0] + ' ' + args[1] + ' ' + args[2] + ' ' + args[3], function (err, stdout, stderr) {
+            if (err) console.error(stderr);
+        });
+        
+        const attachment = new Discord.MessageAttachment('image.bmp', 'image.bmp');
+
+        const embed = new Discord.MessageEmbed().setTitle('Attachment').setImage('attachment://image.bmp');
+        message.channel.send({ embeds: [embed], files: ['image.bmp'] });
+    }
     else message.channel.send("_bro that isnt a command_");
 });
 
