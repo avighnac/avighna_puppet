@@ -55,6 +55,19 @@ client.once('ready', async () => {
     })
     */
 
+    /* client.api.applications(client.user.id).commands.post({data: {
+        name: 'rvc',
+            description: "Simple reverse-word-cipher!",
+            options: [
+                {
+                    name: 'text',
+                    description: 'Text to convert!',
+                    required: true,
+                    type: 3,
+                }
+            ],
+    }}) */
+
     /*
     client.api.applications(client.user.id).commands.post({data: {
         name: 'ping',
@@ -121,6 +134,18 @@ client.once('ready', async () => {
             console.log('[EXECUTE] commands/scripts/rot13.out \"' + text + "\"");
 
             exec('commands/scripts/rot13.out \"' + text + "\"", function (err, stdout, stderr) {
+                if (err) console.error(stderr);
+                reply(interaction, stdout);
+            });
+        }
+        if (command === 'rvc') {
+            exec('chmod +x commands/scripts/rvc.out');
+
+            let text = interaction.data.options[0].value;
+
+            console.log('[EXECUTE] commands/scripts/rvc.out \"' + text + "\"");
+
+            exec('commands/scripts/rvc.out \"' + text + "\"", function (err, stdout, stderr) {
                 if (err) console.error(stderr);
                 reply(interaction, stdout);
             });
