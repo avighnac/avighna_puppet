@@ -66,7 +66,22 @@ client.once('ready', async () => {
                     type: 3,
                 }
             ],
-    }}) */
+    }}) 
+    
+    client.api.applications(client.user.id).commands.post({data: {
+        name: 'mock',
+            description: "mOcKs tExT",
+            options: [
+                {
+                    name: 'text',
+                    description: 'Text to mock.',
+                    required: true,
+                    type: 3,
+                }
+            ],
+    }})
+
+    */
 
     /*
     client.api.applications(client.user.id).commands.post({data: {
@@ -197,6 +212,18 @@ client.once('ready', async () => {
                     },
                 }
             })
+        }
+        if (command == 'mock') {
+            exec('chmod +x commands/scripts/mock.out');
+
+            let text = interaction.data.options[0].value;
+
+            console.log('[EXECUTE] commands/scripts/mock.out \"' + text + "\"");
+
+            exec('commands/scripts/mock.out \"' + text + "\"", function (err, stdout, stderr) {
+                if (err) console.error(stderr);
+                reply(interaction, stdout);
+            });
         }
     })
 });
