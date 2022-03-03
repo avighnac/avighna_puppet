@@ -126,8 +126,6 @@ client.once('ready', async () => {
         }
     })
     */
-    
-
 
     client.ws.on('INTERACTION_CREATE', async (interaction) => {
         
@@ -136,19 +134,30 @@ client.once('ready', async () => {
         const command = name.toLowerCase();
 
         if (command === 'ping') {
-            reply(interaction, 'Pong!');
+            interaction.deferReply();
+            interaction.editReply({ content: "replied" });
         }
         if (command === 'invite') {
             reply(interaction, 'https://discord.gg/u8kpgmwdz5');
         }
         if (command === 'rot13') {
-            exec('chmod +x commands/scripts/rot13.out');
+            // exec('chmod +x commands/scripts/rot13.out');
+
+            // let text = interaction.data.options[0].value;
+
+            // console.log('[EXECUTE] commands/scripts/rot13.out \"' + text + "\"");
+
+            // exec('commands/scripts/rot13.out \"' + text + "\"", function (err, stdout, stderr) {
+            //     if (err) console.error(stderr);
+            //     reply(interaction, stdout);
+            // });
+            exec('chmod +x commands/scripts/q.out');
 
             let text = interaction.data.options[0].value;
 
-            console.log('[EXECUTE] commands/scripts/rot13.out \"' + text + "\"");
+            console.log('[EXECUTE] commands/scripts/q.out \"' + text + "\"");
 
-            exec('commands/scripts/rot13.out \"' + text + "\"", function (err, stdout, stderr) {
+            exec('commands\\scripts\\q.out \"' + text + "\"", function (err, stdout, stderr) {
                 if (err) console.error(stderr);
                 reply(interaction, stdout);
             });
