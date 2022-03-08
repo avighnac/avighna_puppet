@@ -123,9 +123,25 @@ client.once('ready', async () => {
                         type: 3,
                     }
                 ],
-        }
-    })
-    */
+            }
+        })
+
+        client.api.applications(client.user.id).commands.post({
+            data: {
+                    name: 'sock',
+                    description: "Generate a multiplication worksheet.",
+                    options: [
+                        {
+                            name: 'max-number',
+                            description: 'The largest number which will be used in the worksheet.',
+                            required: true,
+                            type: 3,
+                        }
+                    ],
+            }
+        })
+        */
+
 
     client.ws.on('INTERACTION_CREATE', async (interaction) => {
         
@@ -282,6 +298,17 @@ client.on('message', message => {
 
         const embed = new Discord.MessageEmbed().setTitle('Attachment').setImage('attachment://image.bmp');
         message.channel.send({ embeds: [embed], files: ['image.bmp'] });
+    }
+    else if (command == 'sock') {
+        exec('chmod +x commands/scripts/generateMultiplicationWorksheet');
+
+        console.log('[EXECUTE] commands/scripts/generateMultiplicationWorksheet ' + args[0]);
+
+        exec('commands/scripts/generateMultiplicationWorksheet ' + args[0], function (err, stdout, stderr) {
+            if (err) console.error(stderr);
+            const embed = new Discord.MessageEmbed().setTitle('Attachment');
+            message.channel.send({ embeds: [embed], files: [stdout] });
+        });
     }
     else message.channel.send("_bro that isnt a command_");
 });
