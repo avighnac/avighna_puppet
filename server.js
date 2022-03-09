@@ -300,11 +300,18 @@ client.on('message', message => {
         message.channel.send({ embeds: [embed], files: ['image.bmp'] });
     }
     else if (command == 'sock') {
-        exec('chmod +x commands/scripts/generateMultiplicationWorksheet');
+        exec('chmod +x commands/scripts/generateArithmeticWorksheet');
+        
+        let arg1 = args[0];
+        let arg2 = args[1];
+        if (arg1 == undefined)
+            arg1 = 1000;
+        if (arg2 == undefined)
+            arg2 = "";
 
-        console.log('[EXECUTE] commands/scripts/generateMultiplicationWorksheet ' + args[0]);
+        console.log('[EXECUTE] commands/scripts/generateArithmeticWorksheet ' + arg1 + ' ' + arg2);
 
-        exec('commands/scripts/generateMultiplicationWorksheet ' + args[0], function (err, stdout, stderr) {
+        exec('commands/scripts/generateArithmeticWorksheet ' + arg1 + ' ' + arg2, function (err, stdout, stderr) {
             if (err) console.error(stderr);
             const embed = new Discord.MessageEmbed().setTitle('Attachment');
             message.channel.send({ embeds: [embed], files: [stdout] });
