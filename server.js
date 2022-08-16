@@ -140,8 +140,22 @@ client.once('ready', async () => {
                     ],
             }
         })
-        */
 
+        client.api.applications(client.user.id).commands.post({
+            data: {
+                    name: 'subsets',
+                    description: "Generate all possible subsets of a set.",
+                    options: [
+                        {
+                            name: 'set-elements',
+                            description: 'Type in the elements of the set, separated by commas.',
+                            required: true,
+                            type: 3,
+                        }
+                    ],
+            }
+        })
+        */
 
     client.ws.on('INTERACTION_CREATE', async (interaction) => {
         
@@ -165,6 +179,19 @@ client.once('ready', async () => {
 
             exec('commands/scripts/rot13.out \"' + text + "\"", function (err, stdout, stderr) {
                 if (err) console.error(stderr);
+                reply(interaction, stdout);
+            });
+        }
+        if (command === 'subsets') {
+            exec('chmod +x commands/scripts/subsets.out');
+
+            let text = interaction.data.options[0].value;
+
+            console.log('[EXECUTE] commands/scripts/subsets.out \"' + text + "\"");
+
+            exec('commands/scripts/subsets.out \"' + text + "\"", function (err, stdout, stderr) {
+                if (err) console.error(stderr);
+                stdout = "```cpp\n" + stdout + "```";
                 reply(interaction, stdout);
             });
         }
