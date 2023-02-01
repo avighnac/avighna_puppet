@@ -5,11 +5,10 @@ module.exports = {
     name: 'Mock',
     description: "mOcKs TeXt",
     execute(message, args) {
-        let str = message.content.substr(6, message.content.length);
-        let answer = "";
+        let str = message.content.substr(6, message.content.length).toUpperCase();
 
-        for (let i = 0; i < str.length; i++) {
-            answer += str.charAt(i)[i % 2 ? 'toUpperCase' : 'toLowerCase']();
+        for (let i = 1; i < str.length; i+=2) {
+            answer += str.charAt(i).toLowerCase();
         }
 
         const answerEmbed = new Discord.MessageEmbed().setTitle('Mock').setFooter(answer);
