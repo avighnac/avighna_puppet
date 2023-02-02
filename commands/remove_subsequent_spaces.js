@@ -8,7 +8,7 @@ module.exports = {
 
         let str = message.content.substr(26, message.content.length);
 
-        function remove_part_of_string(str, start, end) {
+        /*function remove_part_of_string(str, start, end) {
             let answer = "";
 
             for (let i = 0; i < str.length; i++) {
@@ -34,13 +34,13 @@ module.exports = {
             }
 
             return str;
-        }
+        }*/
 
         let str_before = str;
-        str = remove_sub_spaces(str);
+        str = str.replace("  "," ");
         while (str != str_before) {
             str_before = str;
-            str = remove_sub_spaces(str);
+            str = str.replace("  "," ");
         }
 
         //message.channel.send('The message \"' + message.content.substr(26, message.content.length)+ '\" without subsequent spaces is \"' + str + '\"');

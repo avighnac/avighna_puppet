@@ -4,7 +4,7 @@ const { info } = require('console');
 var { exec, spawn } = require('child_process');
 const Discord = require('discord.js');
 require('dotenv').config();
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, Collection, Command } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const prefix = ".";
 
@@ -17,146 +17,15 @@ const getApp = (guildId) => {
     return app;
 }
 
-const guildId = '888512408413421609'
+const guildId = '888512408413421609';
+
 
 client.once('ready', async () => {
     console.log('It works! The bot is running!');
 
     const commands = await getApp(guildId)
     .commands.get()
-    // console.log(commands);
-
-    /*
-    await getApp(guildId).commands.post({
-        data: {
-            name: 'ping',
-            description: 'This is a ping command!',
-        }
-    })
-    await getApp(guildId).commands.post({
-        data: {
-            name: 'invite',
-            description: 'Do you wanna invite somebody? Well now you can!',
-        }
-    })
-    await getApp(guildId).commands.post({
-        data: {
-            name: 'rot13',
-            description: "ROT (13) your text!",
-            options: [
-                {
-                    name: 'text',
-                    description: 'Text to convert!',
-                    required: true,
-                    type: 3,
-                }
-            ],
-        }
-    })
-    */
-
-    /* client.api.applications(client.user.id).commands.post({data: {
-        name: 'rvc',
-            description: "Simple reverse-word-cipher!",
-            options: [
-                {
-                    name: 'text',
-                    description: 'Text to convert!',
-                    required: true,
-                    type: 3,
-                }
-            ],
-    }}) 
     
-    client.api.applications(client.user.id).commands.post({data: {
-        name: 'mock',
-            description: "mOcKs tExT",
-            options: [
-                {
-                    name: 'text',
-                    description: 'Text to mock.',
-                    required: true,
-                    type: 3,
-                }
-            ],
-    }})
-
-    */
-
-    /*
-    client.api.applications(client.user.id).commands.post({data: {
-        name: 'ping',
-        description: 'ping pong!'
-    }}) */
-
-    /*
-    client.api.applications(client.user.id).commands.post({
-        data: {
-                name: 'math',
-                description: "Use math++ in discord.",
-                options: [
-                    {
-                        name: 'command-arguments',
-                        description: 'Type in your command, like you would on a normal command line.',
-                        required: true,
-                        type: 3,
-                    }
-                ],
-        }
-    })
-
-    client.api.applications(client.user.id).commands.post({
-        data: {
-                name: 'draw',
-                description: "Draw geometrical figures!",
-                options: [
-                    {
-                        name: 'polygon-name',
-                        description: 'Eg: right_angle_triangle',
-                        required: true,
-                        type: 3,
-                    },
-                    {
-                        name: 'sides',
-                        description: 'Syntax: [side1] [side2] ... [sideN]',
-                        required: true,
-                        type: 3,
-                    }
-                ],
-            }
-        })
-
-        client.api.applications(client.user.id).commands.post({
-            data: {
-                    name: 'sock',
-                    description: "Generate a multiplication worksheet.",
-                    options: [
-                        {
-                            name: 'max-number',
-                            description: 'The largest number which will be used in the worksheet.',
-                            required: true,
-                            type: 3,
-                        }
-                    ],
-            }
-        })
-
-        client.api.applications(client.user.id).commands.post({
-            data: {
-                    name: 'subsets',
-                    description: "Generate all possible subsets of a set.",
-                    options: [
-                        {
-                            name: 'set-elements',
-                            description: 'Type in the elements of the set, separated by commas.',
-                            required: true,
-                            type: 3,
-                        }
-                    ],
-            }
-        })
-        */
-
     client.ws.on('INTERACTION_CREATE', async (interaction) => {
         
         const { name, options } = interaction.data;
@@ -300,24 +169,15 @@ client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
-
-    if (command == "ping") client.commands.get('Ping').execute(message, args);
-    else if (command == 'invite') client.commands.get('Invite').execute(message, args);
-    else if (command == 'add') client.commands.get('Add').execute(message, args);
-    else if (command === 'mute') client.commands.get('Mute').execute(message, args);
-    else if (command === 'unmute') client.commands.get('Unmute').execute(message, args);
-    else if (command === 'remove_subsequent_spaces') client.commands.get('remove_subsequent_spaces').execute(message, args);
-    else if (command == 'mock') client.commands.get('Mock').execute(message, args);
-    else if (command == 'help') client.commands.get('Help').execute(message, args);
-    else if (command == 'rot13') client.commands.get('Rot13').execute(message, args);
-    else if (command == 'ebg13') message.channel.send('Did you mean .rot13, but in ROT13? :wink:');
-    else if (command == 'sqrt') client.commands.get('Sqrt').execute(message, args);
-    else if (command === 'draw') {
+    try {
+        client.commands.get(command).execute(message, args);
+    } catch {
+    if (command === 'draw') {
         exec('chmod +x commands/scripts/math++.out');
 
-        console.log('[EXECUTE] commands/scripts/math++.out draw ' + args[0] + ' ' + args[1] + ' ' + args[2] + ' ' + args[3]);
+        console.log('[EXECUTE] commands/scripts/math++.out draw ' + args.slice(0,4).join(' '));
 
-        exec('commands/scripts/math++.out draw ' + args[0] + ' ' + args[1] + ' ' + args[2] + ' ' + args[3], function (err, stdout, stderr) {
+        exec('commands/scripts/math++.out draw '+ args.slice(0,4).join(' '), function (err, stdout, stderr) {
             if (err) console.error(stderr);
         });
         
@@ -329,12 +189,8 @@ client.on('message', message => {
     else if (command == 'sock') {
         exec('chmod +x commands/scripts/generateArithmeticWorksheet');
         
-        let arg1 = args[0];
-        let arg2 = args[1];
-        if (arg1 == undefined)
-            arg1 = 1000;
-        if (arg2 == undefined)
-            arg2 = "";
+        let arg1 = args[0] ?? 1000;
+        let arg2 = args[1] ?? "";
 
         console.log('[EXECUTE] commands/scripts/generateArithmeticWorksheet ' + arg1 + ' ' + arg2);
 
@@ -345,6 +201,7 @@ client.on('message', message => {
         });
     }
     else message.channel.send("_bro that isnt a command_");
+    }
 });
 
 client.login(process.env.TOKEN);

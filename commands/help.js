@@ -19,9 +19,8 @@ module.exports = {
         .setTitle('Help')
         .setColor('#0099ff');
 
-        for (let i = 0; i < items.length; i++) {
-            embed.setDescription(items.join("\n"));
-        }
+        embed.setDescription(items.join("\n"));
+        
 
         message.channel.send(embed).catch(err => console.error("\n\n\n\n\n\n\n" + err + "\nerror^"));
     }
